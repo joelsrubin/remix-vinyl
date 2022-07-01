@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Up from "../../../public/chevron_up.png";
 import Down from "../../../public/chevron_down.png";
+import { isMobile } from "react-device-detect";
 
 type SortBy =
   | ""
@@ -26,8 +27,10 @@ export function Table({ items }: { items: Release[] }) {
     "thumb",
   ];
 
-  const headers = Object.keys(items[0].basic_information).filter(
-    (h) => !omittedBasicInformation.includes(h)
+  const mobileContent = ["title", "artists"];
+
+  const headers = Object.keys(items[0].basic_information).filter((h) =>
+    isMobile ? mobileContent.includes(h) : !omittedBasicInformation.includes(h)
   );
 
   // extract the row data for each album
@@ -135,7 +138,7 @@ export function Table({ items }: { items: Release[] }) {
         {elements.map((row: any, i: number) => (
           <tr key={i} className="odd:bg-slate-100">
             {Object.keys(row).map((key) => (
-              <td key={key} className="px-5">
+              <td key={key} className="px-10 py-5">
                 {row[key]}
               </td>
             ))}
